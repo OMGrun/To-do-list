@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyparser = require("body-parser");
 const app = express();
-var items = [];
+var items = ["List test"];
 
 app.set('view engine', 'ejs');
 app.use(bodyparser.urlencoded({extended:true}));
@@ -22,7 +22,7 @@ app.get("/", (req,res) =>
 
     res.render("list", {
         KindOfDay : day,
-        newListItem : items
+        newListItems : items
     });
 
 });
