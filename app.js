@@ -1,10 +1,11 @@
 const express = require("express");
 const bodyparser = require("body-parser");
 const app = express();
-let items = ["List test"];
+let items = [""];
 
 app.set('view engine', 'ejs');
 app.use(bodyparser.urlencoded({extended:true}));
+app.use(express.static("public"));
 
 
 app.get("/", (req,res) => 
