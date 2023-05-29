@@ -9,6 +9,9 @@ app.use(bodyparser.urlencoded({extended:true}));
 app.use(express.static("public"));
 
 
+
+// Home route
+
 app.get("/", (req,res) => 
 {
     
@@ -32,13 +35,21 @@ app.get("/", (req,res) =>
 app.post('/', (req,res) => 
 {
     let item = req.body.newItem;
-    items.push(item);
 
-    res.redirect("/");
+    if (req.body.list === "Work"){
+        workItems.push(item)
+        res.redirect('/work')
+    } else {
+        items.push(item);
+        res.redirect('/')
+    }
+
+
 });
 
-// work route
 
+
+// work route
 
 app.get('/work', (req,res) => 
 {
@@ -49,11 +60,7 @@ app.get('/work', (req,res) =>
     })
 })
 
-app.post('/work', (req,res) => 
-{
-    let item = req.body.newItem
-    workItems.push(item)
-})
+
 
 
 app.listen(3000, () =>
