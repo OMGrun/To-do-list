@@ -37,7 +37,7 @@ app.post('/', (req,res) =>
         res.redirect('/work')
     } else {
         items.push(item);
-        res.redirect('/')
+        res.redirect('/');
     }
 
 
