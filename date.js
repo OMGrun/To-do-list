@@ -1,7 +1,7 @@
 exports.getDate = () =>
 {
-    let today = new Date();
-    let options = 
+    const today = new Date();
+    const options = 
         {
             weekday: "long",
             day: "numeric",
@@ -16,8 +16,8 @@ exports.getDate = () =>
 
 module.exports.getDay = () =>
 {
-    let today = new Date();
-    let options = 
+    const today = new Date();
+    const options = 
     {
         weekday: "long"
     };

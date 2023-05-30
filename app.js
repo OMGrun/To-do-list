@@ -5,8 +5,8 @@ const date = require(__dirname + "/date.js")
 
 
 
-let items = [];
-let workItems = [];
+const items = [];
+const workItems = [];
 
 app.set('view engine', 'ejs');
 app.use(bodyparser.urlencoded({extended:true}));
