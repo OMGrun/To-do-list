@@ -19,7 +19,7 @@ app.use(express.static("public"));
 app.get("/", (req,res) => 
 {
 
-    let day = date()
+    let day = date.getDate(); 
     
     res.render("list", {
         listTitle : day,
