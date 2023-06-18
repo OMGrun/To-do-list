@@ -2,11 +2,11 @@ const express = require("express");
 const bodyparser = require("body-parser");
 const app = express();
 const date = require(__dirname + "/date.js")
+const mongoose = require("mongoose");
 
 
 
-const items = [];
-const workItems = [];
+
 
 app.set('view engine', 'ejs');
 app.use(bodyparser.urlencoded({extended:true}));
