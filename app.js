@@ -13,7 +13,7 @@ app.use(express.static("public"));
 
 
 // Mongoose
-mongoose.connect("	mongodb://localhost:27017/todolistDB");
+mongoose.connect("mongodb://localhost:27017/todolistDB");
 
 
  const itemsSchema = new mongoose.Schema(
@@ -41,6 +41,9 @@ mongoose.connect("	mongodb://localhost:27017/todolistDB");
         name : "<-- Hit this to delete an item."
     }
  )
+
+ const defaultItems = [item1, item2, item3];
+
  
 
 
@@ -48,14 +51,27 @@ mongoose.connect("	mongodb://localhost:27017/todolistDB");
 
 app.get("/", (req,res) => 
 {
+    //check if collection is empty.
 
-    let day = date.getDate(); 
+    Item.find({}).then((items) => {
+
+        if (items.length === 0) {
+            Item.insertMany(defaultItems).then(console.log("Inserted!")).catch((err) => 
+            {
+                console.log(err);
+            });
+            res.redirect("/")
+        } else {
+            res.render("list", {
+                listTitle : "Today",
+                newListItems : items
+            });
     
-    res.render("list", {
-        listTitle : "Today",
-        newListItems : items
-    });
+        }
 
+    
+    })
+    
 });
 
 app.post('/', (req,res) => 
