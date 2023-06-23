@@ -44,6 +44,13 @@ mongoose.connect("mongodb://localhost:27017/todolistDB");
 
  const defaultItems = [item1, item2, item3];
 
+ const listSchema = {
+    name : String, 
+    items : [itemsSchema]
+ }
+
+ const List = mongoose.model("List", listSchema)
+
  
 
 
@@ -97,16 +104,19 @@ app.post('/delete', (req,res) =>
 
 
 
-// work route
+// auto route
 
-app.get('/work', (req,res) => 
+app.get('/:customListName', (req,res) => 
 {
-    res.render("list", 
-    {
-        listTitle : "Work List",
-        newListItems : workItems
+    const customListName = req.params.customListName;
+
+    const list = new list({
+        name : customListName,
+        items : defaultItems
     })
+
 })
+
 
 
 // about route
