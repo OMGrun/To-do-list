@@ -2,6 +2,7 @@ const express = require("express");
 const bodyparser = require("body-parser");
 const app = express();
 const mongoose = require("mongoose");
+const _ = require("lodash");
 
 
 
@@ -84,22 +85,37 @@ app.get("/", (req,res) =>
 app.post('/', (req,res) => 
 {
     const itemName = req.body.newItem;
-
+    const listName = req.body.list;
     const item = new Item({
         name: itemName
     })
+
+    if (listName === "Today"){
+        item.save();
+        res.redirect('/');
+    } else {
+        List.findOne({name: listName}).then((foundList) => 
+        {
+            foundList.items.push(item);
+            foundList.save();
+        }).then(res.redirect('/' + listName)).catch(err => console.log(err))
+    }
     
-    item.save();
-    res.redirect("/")
 
 });
 
 app.post('/delete', (req,res) => 
 {
     const checkedItemId = req.body.checkbox;
+    const listName = req.body.listName;
 
-    Item.findByIdAndRemove(checkedItemId).then(console.log("Deleted!")).catch(err => {console.log(err);});
-    res.redirect("/");
+    if (listName === "Today"){
+        Item.findByIdAndRemove(checkedItemId).then(console.log("Deleted!")).catch(err => {console.log(err);});
+        res.redirect("/");
+    
+    } else {
+        List.findOneAndUpdate({name:listName}, {$pull: {items: {_id: checkedItemId}}}).then(res.redirect('/' + listName))
+    }
 })
 
 
@@ -108,14 +124,28 @@ app.post('/delete', (req,res) =>
 
 app.get('/:customListName', (req,res) => 
 {
-    const customListName = req.params.customListName;
+    const customListName = _.capitalize(req.params.customListName);
 
-    const list = new List({
-        name : customListName,
-        items : defaultItems
-    });
+    List.findOne({name: customListName}).then((foundList) =>
+    {
+        if (!foundList){
+            //Create new list
+            const list = new List({
+                name : customListName,
+                items : defaultItems
+            });
 
-    list.save();
+            list.save();
+            res.redirect("/" + customListName)
+        } else {
+            //Show an existing
+            res.render("list", {
+                listTitle : foundList.name,
+                newListItems : foundList.items
+            })
+        }
+    })
+
 
 })
 
@@ -133,3 +163,4 @@ app.listen(3000, () =>
 {
     console.log("app listening on port 3000");
 });
+
